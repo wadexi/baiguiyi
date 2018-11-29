@@ -11,13 +11,18 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Result;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -84,6 +89,13 @@ public class DbHelper extends SQLiteOpenHelper {
 //        dbHelper.querySql("",)
     }
 
+    /**
+     * 查询
+     * @param sql 查询sql
+     * @param resultClass 返回实体class
+     * @param <Result> 返回实体
+     * @return
+     */
     public <Result> List<Result> querySql(String sql,Class<Result> resultClass){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = null;
@@ -98,6 +110,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 Field[] declaredFields = result.getClass().getDeclaredFields();
                 for(int i = 0; i < declaredFields.length;i++){
                     Field field = declaredFields[i];
+                    if(field.isAnnotationPresent(FieldIgnore.class)){
+                        continue;
+                    }
                     field.setAccessible(true);
                     field.set(result, getFieldValue(cursor,field));
                 }
@@ -127,7 +142,7 @@ public class DbHelper extends SQLiteOpenHelper {
     /**
      * 设置成员变量的值
      */
-    private Object getFieldValue(Cursor cursor, Field field) {
+    private Object getFieldValue(Cursor cursor, Field field) throws InstantiationException, IllegalAccessException {
         Class<?> fieldType = field.getType();
         String fieldName = null;
         ColumnName columnName = field.getAnnotation(ColumnName.class);
@@ -157,9 +172,13 @@ public class DbHelper extends SQLiteOpenHelper {
             }else if(fieldType == Double.TYPE){
                 returnValue =  cursor.getDouble(cursor.getColumnIndex(fieldName));
             }
-        }else if(fieldType.isMemberClass()){
+        }else if(fieldType == String.class){
+            returnValue =  cursor.getString(cursor.getColumnIndex(fieldName));
+        }
+        if(fieldType.isMemberClass()){
             Log.e("db", fieldName + "is member class" );
         }
+
         Log.e("db","field name ：" + fieldName + "   value:" + returnValue);
 
         return returnValue;

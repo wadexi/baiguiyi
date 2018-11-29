@@ -121,7 +121,7 @@ public class GodFormula {
         return "GodFormula{" +
                 "id=" + id +
                 ", name=" + name +
-                ", imgpath='" + imgPath + '\'' +
+                ", imgpath=" + imgPath +
                 ", attackNumber=" + attackNumber +
                 ", lifeNum=" + lifeNum +
                 ", defenseNum=" + defenseNum +

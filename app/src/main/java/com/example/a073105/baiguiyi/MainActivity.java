@@ -16,8 +16,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         DbHelper dbHelper = DbHelper.getInstance(this.getApplicationContext(),4);
-        String sql = "insert into GodFormula(id,name,imgPath,attackNum,lifeNum,defenseNum,crit,critHurt,hit,resistance) values(3,\"茨木童子\",\"1.jpg\",3350,4000,400,1,2.7,1,0.2)";
+        String sql = "insert into GodFormula(id,name,imgPath,attackNum,lifeNum,defenseNum,crit,critHurt,hit,resistance) values(6,\"茨木童子\",\"图片\",3350,4000,400,1,2.7,1,0.2)";
         boolean flag = dbHelper.execSql(sql);
         Log.e("db","insert successful:" + flag);
 
