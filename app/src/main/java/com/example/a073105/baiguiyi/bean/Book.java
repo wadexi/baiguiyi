@@ -4,12 +4,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Book")
-public class MyBean {
+public class Book {
 
     @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "name")
+    @DatabaseField(columnName = "book_name")
     public String name;
 
     @DatabaseField(columnName = "author")
@@ -20,6 +20,9 @@ public class MyBean {
 
     @DatabaseField(columnName = "pages")
     public int pages;
+
+    @DatabaseField(foreign = true,foreignColumnName = "name")
+    private AuthorInfo authorInfo;
 
     public String getAuthor() {
         return author;
@@ -51,5 +54,21 @@ public class MyBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AuthorInfo getAuthorInfo() {
+        return authorInfo;
+    }
+
+    public void setAuthorInfo(AuthorInfo authorInfo) {
+        this.authorInfo = authorInfo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

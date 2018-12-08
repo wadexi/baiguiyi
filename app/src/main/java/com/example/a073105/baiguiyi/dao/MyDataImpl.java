@@ -1,14 +1,14 @@
 package com.example.a073105.baiguiyi.dao;
 
-import com.example.a073105.baiguiyi.bean.MyBean;
+import com.example.a073105.baiguiyi.bean.Book;
 
 import java.util.ArrayList;
 
 public interface MyDataImpl {
 
-    void insert(ArrayList<MyBean> beanArrayList);
+    void insert(ArrayList<Book> beanArrayList);
 
-    void insert(MyBean myBean);
+    void insert(Book book);
 
     void update(String name, String price);
 
@@ -26,8 +26,8 @@ public interface MyDataImpl {
 
     long queryCount();
 
-    ArrayList<MyBean> queryId(int id);
+    ArrayList<Book> queryId(int id);
 
-    ArrayList<MyBean> queryAll();
+    ArrayList<Book> queryAll();
 
 }

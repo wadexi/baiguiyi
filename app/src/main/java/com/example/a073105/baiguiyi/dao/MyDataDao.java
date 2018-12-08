@@ -2,7 +2,7 @@ package com.example.a073105.baiguiyi.dao;
 
 import android.content.Context;
 
-import com.example.a073105.baiguiyi.bean.MyBean;
+import com.example.a073105.baiguiyi.bean.Book;
 import com.example.a073105.baiguiyi.db.MyDatabaseHelper;
 import com.j256.ormlite.dao.Dao;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class MyDataDao implements MyDataImpl{
 
     private MyDatabaseHelper mHelper;
-    private Dao<MyBean, Integer> dao;
+    private Dao<Book, Integer> dao;
     private Context mContext;
     private static MyDataDao instance;
 
@@ -21,7 +21,7 @@ public class MyDataDao implements MyDataImpl{
         this.mContext = context;
         try {
             mHelper = MyDatabaseHelper.getHelper(mContext);
-            dao = mHelper.getDao(MyBean.class);
+            dao = mHelper.getDao(Book.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,7 +40,7 @@ public class MyDataDao implements MyDataImpl{
     }
 
     @Override
-    public void insert(MyBean myBean) {
+    public void insert(Book book) {
 
         try {
 
@@ -52,15 +52,15 @@ public class MyDataDao implements MyDataImpl{
                 }
             });*/
 
-            dao.create(myBean);
-            //dao.createOrUpdate(myBean);//和上一行的方法效果一样
+            dao.create(book);
+            //dao.createOrUpdate(book);//和上一行的方法效果一样
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void insert(ArrayList<MyBean> beanArrayList) {
+    public void insert(ArrayList<Book> beanArrayList) {
         try {
             dao.create(beanArrayList);
         } catch (SQLException e) {
@@ -70,11 +70,11 @@ public class MyDataDao implements MyDataImpl{
 
     @Override
     public void update(String name, String price) {
-        ArrayList<MyBean> list = null;
+        ArrayList<Book> list = null;
         try {
-            list = (ArrayList<MyBean>) dao.queryForEq("name", name);
+            list = (ArrayList<Book>) dao.queryForEq("name", name);
             if (list != null) {
-                for (MyBean bean : list) {
+                for (Book bean : list) {
                     bean.setPrice(price);
                     dao.update(bean);
                     //dao.createOrUpdate(bean);//和上一行的方法效果一样
@@ -113,11 +113,11 @@ public class MyDataDao implements MyDataImpl{
 
     @Override
     public void delete(String name) {
-        ArrayList<MyBean> list = null;
+        ArrayList<Book> list = null;
         try {
-            list = (ArrayList<MyBean>) dao.queryForEq("name", name);
+            list = (ArrayList<Book>) dao.queryForEq("name", name);
             if (list != null) {
-                for (MyBean bean : list) {
+                for (Book bean : list) {
                     dao.delete(bean);
                 }
             }
@@ -144,14 +144,14 @@ public class MyDataDao implements MyDataImpl{
 
     @Override
     public ArrayList<String> queryPrice(String name) {
-        List<MyBean> list = null;
+        List<Book> list = null;
         ArrayList<String> strings = null;
         try {
             list = dao.queryForEq("name", name);
             if (list != null) {
                 strings = new ArrayList<>();
-                for (MyBean myBean : list) {
-                    strings.add(myBean.getPrice());
+                for (Book book : list) {
+                    strings.add(book.getPrice());
                 }
                 /*for (int i = 0; i < list.size(); i++) {
                     strings.add(list.get(i).getPrice());
@@ -165,14 +165,14 @@ public class MyDataDao implements MyDataImpl{
 
     @Override
     public String queryAuthor(String name1, String price1) {
-        List<MyBean> list = null;
+        List<Book> list = null;
         String author = "";
 
         try {
-            list = dao.queryBuilder().where().eq("name", name1).and().eq("price", price1).query();//上述相当与：select * from Book where name = name1 and price = price1 ;
+            list = dao.queryBuilder().where().eq("book_name", name1).and().eq("price", price1).query();//上述相当与：select * from Book where name = name1 and price = price1 ;
             if (list != null) {
-                for (MyBean myBean : list) {
-                    author = myBean.getAuthor();
+                for (Book book : list) {
+                    author = book.getAuthor();
                 }
             }
         } catch (SQLException e) {
@@ -200,14 +200,14 @@ public class MyDataDao implements MyDataImpl{
      * @param id 这个id 就是表中，每次插入数据，自己递增的id 字段
      */
     @Override
-    public ArrayList<MyBean> queryId(int id) {
-        ArrayList<MyBean> list = null;
+    public ArrayList<Book> queryId(int id) {
+        ArrayList<Book> list = null;
 
         try {
-            MyBean myBean = dao.queryForId(id);
-            if (myBean != null) {
+            Book book = dao.queryForId(id);
+            if (book != null) {
                 list = new ArrayList<>();
-                list.add(myBean);
+                list.add(book);
             }
             return list;
         } catch (SQLException e) {
@@ -217,10 +217,10 @@ public class MyDataDao implements MyDataImpl{
     }
 
     @Override
-    public ArrayList<MyBean> queryAll() {
-        ArrayList<MyBean> list = null;
+    public ArrayList<Book> queryAll() {
+        ArrayList<Book> list = null;
         try {
-            list = (ArrayList<MyBean>) dao.queryForAll();
+            list = (ArrayList<Book>) dao.queryForAll();
 
             if (list != null) {
                 return list;

@@ -3,7 +3,8 @@ package com.example.a073105.baiguiyi.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.a073105.baiguiyi.bean.MyBean;
+import com.example.a073105.baiguiyi.bean.AuthorInfo;
+import com.example.a073105.baiguiyi.bean.Book;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -25,7 +26,8 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, MyBean.class);
+            TableUtils.createTable(connectionSource, AuthorInfo.class);
+            TableUtils.createTable(connectionSource, Book.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,7 +40,7 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             switch (oldVersion) {
                 case 1:
-                    getDao(MyBean.class).executeRaw("alter table Book add column book_type varchar(20)");
+                    getDao(Book.class).executeRaw("alter table Book add column book_type varchar(20)");
                     //在数据库版本1的下一版本，Book表中新添加了 book_type 字段
 
                 case 2:
@@ -49,7 +51,7 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
             }
 
             //显然这样处理比较暴力
-            //TableUtils.dropTable(connectionSource, MyBean.class, true);
+            //TableUtils.dropTable(connectionSource, Book.class, true);
             //onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
