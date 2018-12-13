@@ -7,7 +7,13 @@ package com.j256.ormlite.field;
  * <b>NOTE:</b> If you add types here you will need to add to the various DatabaseType implementors' appendColumnArg()
  * method.
  * </p>
- * 
+ *
+ * 支持的SQL数据类型。 这些基本上是java.sql.Types中常量的枚举。
+ * <P>
+ * <b>注意：</ b>如果您在此处添加类型，则需要添加到各种DatabaseType实现者的appendColumnArg（）
+ * 方法。
+ * </ p>
+ *
  * @author graywatson
  */
 public enum SqlType {

@@ -36,9 +36,10 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 
 	private final SQLiteDatabase db;
 	private final boolean readWrite;
-	private final boolean cancelQueriesEnabled;
+	private final boolean cancelQueriesEnabled; //取消查询是否可用
 
 	static {
+		//检查core 的版本和 android的版本是否相同  VERSION__5.1-SNAPSHOT__
 		VersionUtils.checkCoreVersusAndroidVersions(ANDROID_VERSION);
 	}
 
@@ -75,6 +76,8 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 		/*
 		 * Sqlite does not support auto-commit. The various JDBC drivers seem to implement it with the use of a
 		 * transaction. That's what we are doing here.
+		 * Sqlite不支持自动提交。 各种JDBC驱动程序似乎使用a来实现它
+			交易。 这就是我们在这里所做的。
 		 */
 		if (autoCommit) {
 			if (db.inTransaction()) {
@@ -101,6 +104,7 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 
 	/**
 	 * Return whether this connection is read-write or not (real-only).
+	 * 返回此连接是否为读写（仅限实时）。
 	 */
 	public boolean isReadWrite() {
 		return readWrite;
@@ -157,7 +161,7 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 	@Override
 	public CompiledStatement compileStatement(String statement, StatementType type, FieldType[] argFieldTypes,
 			int resultFlags, boolean cacheStore) {
-		// resultFlags argument is not used in Android-land since the {@link Cursor} is bi-directional.
+		// resultFlags argument is not used in Android-land since the {@link Cursor} is bi-directional. 由于{@link Cursor}是双向的，因此在Android-land中不使用resultFlags参数。
 		CompiledStatement stmt = new AndroidCompiledStatement(statement, db, type, cancelQueriesEnabled, cacheStore);
 		logger.trace("{}: compiled statement got {}: {}", this, stmt, statement);
 		return stmt;
@@ -168,7 +172,7 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 			throws SQLException {
 		SQLiteStatement stmt = null;
 		try {
-			stmt = db.compileStatement(statement);
+			stmt = db.compileStatement(statement);//为什么不使用execSql/ long insert(String table, String nullColumnHack, ContentValues values) {
 			bindArgs(stmt, args, argFieldTypes);
 			long rowId = stmt.executeInsert();
 			if (keyHolder != null) {
@@ -177,6 +181,8 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 			/*
 			 * I've decided to not do the CHANGES() statement here like we do down below in UPDATE because we know that
 			 * it worked (since it didn't throw) so we know that 1 is right.
+			 * 我决定不在这里做CHANGES（）声明，就像我们在UPDATE下面做的那样，因为我们知道这一点
+				它工作（因为它没有扔）所以我们知道1是对的。
 			 */
 			int result = 1;
 			logger.trace("{}: insert statement is compiled and executed, changed {}: {}", this, result, statement);
@@ -413,6 +419,7 @@ public class AndroidDatabaseConnection implements DatabaseConnection {
 
 	/**
 	 * We can't use IOUtils here because older versions didn't implement Closeable.
+	 * 我们不能在这里使用IOUtils，因为旧版本没有实现Closeable。
 	 */
 	private void closeQuietly(SQLiteStatement statement) {
 		if (statement != null) {

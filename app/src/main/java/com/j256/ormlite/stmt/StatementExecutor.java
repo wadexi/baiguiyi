@@ -76,6 +76,7 @@ public class StatementExecutor<T, ID> implements GenericRowMapper<String[]> {
 
 	/**
 	 * Provides statements for various SQL operations.
+	 * 提供各种SQL操作的语句。
 	 */
 	public StatementExecutor(DatabaseType databaseType, TableInfo<T, ID> tableInfo, Dao<T, ID> dao) {
 		this.databaseType = databaseType;

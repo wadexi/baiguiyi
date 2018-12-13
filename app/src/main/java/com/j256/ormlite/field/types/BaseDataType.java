@@ -83,6 +83,7 @@ public abstract class BaseDataType extends BaseFieldConverter implements DataPer
 	/**
 	 * @throws SQLException
 	 *             If there are problems creating the config object. Needed for subclasses.
+	 *             如果创建配置对象时出现问题。 需要子类。
 	 */
 	@Override
 	public Object makeConfigObject(FieldType fieldType) throws SQLException {

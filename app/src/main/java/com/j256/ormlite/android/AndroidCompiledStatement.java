@@ -208,6 +208,7 @@ public class AndroidCompiledStatement implements CompiledStatement {
 
 	/**
 	 * Execute some SQL on the database and return the number of rows changed.
+	 * 在数据库上执行一些SQL并返回更改的行数。
 	 */
 	static int execSql(SQLiteDatabase db, String label, String finalSql, Object[] argArray) throws SQLException {
 		try {
@@ -218,7 +219,7 @@ public class AndroidCompiledStatement implements CompiledStatement {
 		int result;
 		SQLiteStatement stmt = null;
 		try {
-			// ask sqlite how many rows were just changed
+			// ask sqlite how many rows were just changed 询问sqlite刚改变了多少行
 			stmt = db.compileStatement("SELECT CHANGES()");
 			result = (int) stmt.simpleQueryForLong();
 		} catch (android.database.SQLException e) {

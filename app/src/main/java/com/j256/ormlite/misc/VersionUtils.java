@@ -5,7 +5,7 @@ import com.j256.ormlite.logger.LoggerFactory;
 
 /**
  * A class which helps us verify that we are running symmetric versions.
- * 
+ * 帮助我们验证运行对称版本的类。
  * @author graywatson
  */
 public class VersionUtils {
@@ -29,6 +29,7 @@ public class VersionUtils {
 
 	/**
 	 * Verifies that the ormlite-core and -android version files hold the same string.
+	 * 验证ormlite-core和-android版本文件是否包含相同的字符串。
 	 */
 	public static final void checkCoreVersusAndroidVersions(String androidVersion) {
 		logVersionWarnings("core", coreVersion, "android", androidVersion);

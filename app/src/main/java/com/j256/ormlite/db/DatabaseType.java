@@ -14,6 +14,7 @@ import com.j256.ormlite.table.DatabaseTableConfig;
 
 /**
  * Definition of the per-database functionality needed to isolate the differences between the various databases.
+ * 定义隔离各种数据库之间差异所需的每数据库功能。
  * 
  * @author graywatson
  */
@@ -22,6 +23,8 @@ public interface DatabaseType {
 	/**
 	 * Return true if the database URL corresponds to this database type. Usually the URI is in the form jdbc:ddd:...
 	 * where ddd is the driver url part.
+	 * 如果数据库URL对应于此数据库类型，则返回true。 通常URI的格式为jdbc：ddd：...
+	 * 其中ddd是驱动程序URL部分。
 	 */
 	public boolean isDatabaseUrlThisType(String url, String dbTypePart);
 
@@ -43,18 +46,24 @@ public interface DatabaseType {
 	 * also generate additional arguments which go at the end of the insert statement or additional statements to be
 	 * executed before or afterwards depending on the configurations. The database can also add to the list of queries
 	 * that will be performed afterward to test portions of the config.
+	 * 获取{@link FieldType}并将创建字段所需的SQL附加到字符串构建器。 该领域可能
+	 * 还生成其他参数，这些参数位于insert语句的末尾或其他语句中
+	 * 根据配置执行之前或之后执行。 数据库还可以添加到查询列表中
+	 * 之后将执行以测试部分配置。
 	 */
 	public void appendColumnArg(String tableName, StringBuilder sb, FieldType fieldType, List<String> additionalArgs,
                                 List<String> statementsBefore, List<String> statementsAfter, List<String> queriesAfter) throws SQLException;
 
 	/**
 	 * Appends information about primary key field(s) to the additional-args or other lists.
+	 * 将有关主键字段的信息附加到additional-args或其他列表。  additional  额外
 	 */
 	public void addPrimaryKeySql(FieldType[] fieldTypes, List<String> additionalArgs, List<String> statementsBefore,
                                  List<String> statementsAfter, List<String> queriesAfter) throws SQLException;
 
 	/**
 	 * Appends information about unique field(s) to the additional-args or other lists.
+	 * 将有关唯一字段的信息附加到附加参数或其他列表。
 	 */
 	public void addUniqueComboSql(FieldType[] fieldTypes, List<String> additionalArgs, List<String> statementsBefore,
                                   List<String> statementsAfter, List<String> queriesAfter) throws SQLException;
@@ -93,18 +102,33 @@ public interface DatabaseType {
 	 * inserted. For old[er] versions of Postgres, for example, the JDBC call-back stuff to get the just-inserted id
 	 * value does not work so we have to get the next sequence value by hand, assign it into the object, and then insert
 	 * the object -- yes two SQL statements.
+	 *
+	 *
+	 *
+	 487/5000
+	 如果数据库在使用生成的ID时需要序列，则返回true。 一些数据库（H2，MySQL）创建它们
+	 自动神奇。 这也意味着数据库需要在</ i>对象之前查询序列值<i>
+	 插入。 例如，对于Postgres的旧[er]版本，JDBC回调函数可以获得刚刚插入的id
+	 值不起作用所以我们必须手动获取下一个序列值，将其分配给对象，然后插入
+	 对象 - 是两个SQL语句。
 	 */
 	public boolean isIdSequenceNeeded();
 
 	/**
 	 * Return the DataPersister to associate with the DataType. This allows the database instance to convert a field as
 	 * necessary before it goes to the database.
+	 *
+	 * 返回DataPersister（数据持久性）以与DataType关联。 这允许数据库实例将字段转换为
+	 * 在进入数据库之前是必要的。
 	 */
 	public DataPersister getDataPersister(DataPersister defaultPersister, FieldType fieldType);
 
 	/**
 	 * Return the FieldConverter to associate with the DataType. This allows the database instance to convert a field as
 	 * necessary before it goes to the database.
+	 *
+	 * 返回FieldConverter以与DataType关联。 这允许数据库实例将字段转换为
+	 * 在进入数据库之前是必要的。
 	 */
 	public FieldConverter getFieldConverter(DataPersister dataType, FieldType fieldType);
 

@@ -120,6 +120,7 @@ public class DatabaseTableConfig<T> {
 
 	/**
 	 * Extract the field types from the fieldConfigs if they have not already been configured.
+	 * 如果尚未配置字段类型，则从fieldConfigs中提取字段类型。
 	 */
 	public void extractFieldTypes(ConnectionSource connectionSource) throws SQLException {
 		if (fieldTypes == null) {

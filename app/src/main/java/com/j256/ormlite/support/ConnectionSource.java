@@ -7,6 +7,7 @@ import com.j256.ormlite.db.DatabaseType;
 
 /**
  * A reduction of the SQL DataSource so we can implement its functionality outside of JDBC.
+ * 减少SQL数据源，以便我们可以在JDBC之外实现其功能。
  * 
  * @author graywatson
  */

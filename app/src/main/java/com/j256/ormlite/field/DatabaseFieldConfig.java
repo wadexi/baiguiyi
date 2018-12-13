@@ -643,6 +643,7 @@ public class DatabaseFieldConfig {
 
 	/**
 	 * Process the settings when we are going to consume them.
+	 * 在我们要使用它们时处理设置。
 	 */
 	public void postProcess() {
 		if (foreignColumnName != null) {

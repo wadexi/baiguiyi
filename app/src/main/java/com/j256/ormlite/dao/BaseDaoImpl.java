@@ -136,6 +136,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 
 	/**
 	 * Initialize the various DAO configurations after the various setters have been called.
+	 * 在调用各种setter之后初始化各种DAO配置。
 	 */
 	public void initialize() throws SQLException {
 		if (initialized) {
@@ -172,11 +173,23 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		 * What we do now is have a 2 phase initialization. The constructor initializes most of the fields but then we
 		 * go back and call FieldType.configDaoInformation() after we are done. So for every DAO that is initialized
 		 * here, we have to see if it is the top DAO. If not we save it for dao configuration later.
+		 *
+		 *  这有点复杂。 最初，当我们配置字段类型时，外部DAO信息将是
+			配置为自动刷新，外部BaseDaoEnabled类和外部集合。 这会导致
+			系统去递归和类循环，堆栈溢出。
+			然后我们通过在FieldType构造函数中放置一个可以停止配置的级别计数器来解决这个问题
+			当我们达到一些递归水平。 但是这会产生一些不好的问题，因为我们使用的是DaoManager
+			缓存已经构建的已创建的DAO已被级别限制。
+			我们现在做的是进行2阶段初始化。 构造函数初始化了大部分字段，但接着我们
+			完成后返回并调用FieldType.configDaoInformation（）。 因此对于每个初始化的DAO
+			在这里，我们必须看看它是否是顶级DAO。 如果不是，我们稍后将其保存为dao配置。
+		 *
 		 */
 		List<BaseDaoImpl<?, ?>> daoConfigList = daoConfigLevelLocal.get();
 		daoConfigList.add(this);
 		if (daoConfigList.size() > 1) {
-			// if we have recursed then just save the dao for later configuration
+			// if we have recursed then just save the dao for later configuratio 如果我们已经递归，那么只需保存dao以便以后配置
+
 			return;
 		}
 

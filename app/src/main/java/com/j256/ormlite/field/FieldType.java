@@ -100,7 +100,7 @@ public class FieldType {
 		this.field = field;
 		this.parentClass = parentClass;
 
-		// post process our config settings
+		// post process our config settings 发布我们的配置设置
 		fieldConfig.postProcess();
 
 		Class<?> clazz = field.getType();
@@ -159,12 +159,12 @@ public class FieldType {
 				throw new IllegalArgumentException(
 						"Field " + this + " is a primitive class " + clazz + " but marked as foreign");
 			}
-			if (foreignColumnName == null) {
+			if (foreignColumnName == null) { // 设置为 "字段_id"
 				defaultFieldName = defaultFieldName + FOREIGN_ID_FIELD_SUFFIX;
-			} else {
+			} else {// 设置为 "字段_foreignColumnName"
 				defaultFieldName = defaultFieldName + "_" + foreignColumnName;
 			}
-			if (ForeignCollection.class.isAssignableFrom(clazz)) {
+			if (ForeignCollection.class.isAssignableFrom(clazz)) { //判定此 Class 对象所表示的类或接口与指定的 Class 参数所表示的类或接口是否相同，或是否是其超类或超接口
 				throw new SQLException("Field '" + field.getName() + "' in class " + clazz + "' should use the @"
 						+ ForeignCollectionField.class.getSimpleName() + " annotation not foreign=true");
 			}
@@ -173,11 +173,11 @@ public class FieldType {
 				throw new SQLException("Field class for '" + field.getName() + "' must be of class "
 						+ ForeignCollection.class.getSimpleName() + " or Collection.");
 			}
-			Type type = field.getGenericType();
+			Type type = field.getGenericType();//返回属性声的Type类型 getType()返回的是class
 			if (!(type instanceof ParameterizedType)) {
 				throw new SQLException("Field class for '" + field.getName() + "' must be a parameterized Collection.");
 			}
-			Type[] genericArguments = ((ParameterizedType) type).getActualTypeArguments();
+			Type[] genericArguments = ((ParameterizedType) type).getActualTypeArguments();//返回表示此类型实际类型参数的 Type 对象的数组。[0]就是这个数组中第一个了。简而言之就是获得超类的泛型参数的实际类型。
 			if (genericArguments.length == 0) {
 				// i doubt this will ever be reached
 				throw new SQLException("Field class for '" + field.getName()
@@ -218,7 +218,7 @@ public class FieldType {
 			this.isId = true;
 			this.isGeneratedId = true;
 			if (databaseType.isIdSequenceNeeded()) {
-				this.generatedIdSequence = databaseType.generateIdSequenceName(tableName, this);
+				this.generatedIdSequence = databaseType.generateIdSequenceName(tableName, this);// 值为"tableName_id_seq"
 			} else {
 				this.generatedIdSequence = null;
 			}
@@ -279,7 +279,10 @@ public class FieldType {
 	/**
 	 * Because we go recursive in a lot of situations if we construct DAOs inside of the FieldType constructor, we have
 	 * to do this 2nd pass initialization so we can better use the DAO caches.
-	 * 
+	 * 因为如果我们在FieldType构造函数中构造DAO，我们会在很多情况下递归，我们有
+	 * 执行第二次初始化初始化，以便我们可以更好地使用DAO缓存。
+	 *
+	 * 	FieldType 的二次初始化，一次初始化由于递归出现异常 就是Dao.createDao 方法里又调用了该方法，导致出现异常
 	 * @see BaseDaoImpl#initialize()
 	 */
 	public void configDaoInformation(ConnectionSource connectionSource, Class<?> parentClass) throws SQLException {
@@ -1113,9 +1116,12 @@ public class FieldType {
 	/**
 	 * Configure our data persister and any dependent fields. We have to do this here because both the constructor and
 	 * {@link #configDaoInformation} method can set the data-type.
+	 *
+	 * 配置我们的数据持久性和任何相关字段。 我们必须在这里做，因为构造函数和
+	 * {@link #configDaoInformation}方法可以设置数据类型。
 	 */
 	private void assignDataType(DatabaseType databaseType, DataPersister dataPersister) throws SQLException {
-		dataPersister = databaseType.getDataPersister(dataPersister, this);
+		dataPersister = databaseType.getDataPersister(dataPersister, this);//date 根据sqlType返回 ，其他直接返回
 		this.dataPersister = dataPersister;
 		if (dataPersister == null) {
 			if (!fieldConfig.isForeign() && !fieldConfig.isForeignCollection()) {
@@ -1125,8 +1131,8 @@ public class FieldType {
 			}
 			return;
 		}
-		this.fieldConverter = databaseType.getFieldConverter(dataPersister, this);
-		if (this.isGeneratedId && !dataPersister.isValidGeneratedType()) {
+		this.fieldConverter = databaseType.getFieldConverter(dataPersister, this); //BOOLEAN BIG_DECIMAL 需要转换其他直接返回
+		if (this.isGeneratedId && !dataPersister.isValidGeneratedType()) {//设置了自动获取，但是不是数字类型不能自动获取
 			StringBuilder sb = new StringBuilder();
 			sb.append("Generated-id field '").append(field.getName());
 			sb.append("' in ").append(field.getDeclaringClass().getSimpleName());
@@ -1151,10 +1157,10 @@ public class FieldType {
 		String defaultStr = fieldConfig.getDefaultValue();
 		if (defaultStr == null) {
 			this.defaultValue = null;
-		} else if (this.isGeneratedId) {
+		} else if (this.isGeneratedId) { // 主键不可设置默认值
 			throw new SQLException("Field '" + field.getName() + "' cannot be a generatedId and have a default value '"
 					+ defaultStr + "'");
-		} else {
+		} else {// 根据string 转换成对应的类型 比如 “3” 转换成object 3L
 			this.defaultValue = this.fieldConverter.parseDefaultString(this, defaultStr);
 		}
 	}

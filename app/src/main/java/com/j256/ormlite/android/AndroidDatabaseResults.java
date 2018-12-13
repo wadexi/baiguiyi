@@ -18,7 +18,7 @@ import android.database.Cursor;
 
 /**
  * Android implementation of our results object.
- * 
+ * Android实现我们的结果对象。
  * @author kevingalligan, graywatson
  */
 public class AndroidDatabaseResults implements DatabaseResults {

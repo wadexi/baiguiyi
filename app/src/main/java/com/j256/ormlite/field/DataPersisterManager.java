@@ -69,8 +69,10 @@ public class DataPersisterManager {
 
 	/**
 	 * Lookup the data-type associated with the class.
+	 * 查找与类关联的数据类型。
 	 * 
 	 * @return The associated data-type interface or null if none found.
+	 * 关联的数据类型接口，如果没有找到则返回null。
 	 */
 	public static DataPersister lookupForField(Field field) {
 
